@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace SalesApp
+{
+    public class SaleManager
+    {
+        public List<Sale> Sales { get; private set; }
+
+        public SaleManager()
+        {
+            Sales = new List<Sale>();
+            LoadSales();
+        }
+
+        public void AddSale(Sale sale)
+        {
+            if (sale == null)
+                throw new ArgumentNullException(nameof(sale));
+
+            Sales.Add(sale);
+            SaveSales();
+        }
+
+        public void RemoveSale(Sale sale)
+        {
+            if (sale == null)
+                throw new ArgumentNullException(nameof(sale));
+
+            Sales.Remove(sale);
+            SaveSales();
+        }
+
+        public decimal TotalRevenue
+        {
+            get { return Sales.Sum(s => s.TotalRevenue); }
+        }
+
+        private void SaveSales()
+        {
+            var lines = Sales.Select(s => $"{s.ProductName}|{s.Price}|{s.Quantity}|{s.Date:yyyy-MM-dd HH:mm:ss}");
+            File.WriteAllLines("sales.txt", lines);
+        }
+
+        private void LoadSales()
+        {
+            if (File.Exists("sales.txt"))
+            {
+                var lines = File.ReadAllLines("sales.txt");
+                foreach (var line in lines)
+                {
+                    var parts = line.Split('|');
+                    if (parts.Length == 4)
+                    {
+                        if (decimal.TryParse(parts[1], out decimal price) &&
+                            int.TryParse(parts[2], out int quantity) &&
+                            DateTime.TryParse(parts[3], out DateTime date))
+                        {
+                            Sales.Add(new Sale(parts[0], price, quantity, date));
+                        }
+                    }
+                }
+            }
+        }
+
+        public string GenerateReport()
+        {
+            if (Sales.Count == 0)
+                return "Нет продаж для генерации отчёта.";
+
+            string report = "ОТЧЁТ ПО ПРОДАЖАМ\n";
+            report += "==================\n\n";
+
+            foreach (var sale in Sales)
+            {
+                report += $"Продукт: {sale.ProductName}\n";
+                report += $"Цена: {sale.Price:C}\n";
+                report += $"Количество: {sale.Quantity}\n";
+                report += $"Дата: {sale.Date:dd.MM.yyyy}\n";
+                report += $"Доход: {sale.TotalRevenue:C}\n";
+                report += "------------------\n";
+            }
+
+            report += $"\nИТОГОВЫЙ ДОХОД: {TotalRevenue:C}";
+
+            File.WriteAllText("sales_report.txt", report);
+            return report;
+        }
+    }
+}
