@@ -111,6 +111,25 @@ namespace SalesApp
             this.MaximizeBox = false;
             this.ResumeLayout(false);
             this.PerformLayout();
+
+            // Цвета для кнопок
+            this.addSaleButton.BackColor = Color.FromArgb(76, 175, 80);    // Зеленый
+            this.removeSaleButton.BackColor = Color.FromArgb(244, 67, 54); // Красный
+            this.generateReportButton.BackColor = Color.FromArgb(33, 150, 243); // Синий
+
+            // Цвет фона формы
+            this.BackColor = Color.FromArgb(240, 240, 245);
+
+            // Цвет и рамка для списка
+            this.salesListBox.BackColor = Color.FromArgb(250, 250, 255);
+            this.salesListBox.BorderStyle = BorderStyle.FixedSingle;
+
+            // Жирный шрифт для общего дохода
+            this.totalRevenueLabel.Font = new Font("Arial", 12, FontStyle.Bold);
+            this.totalRevenueLabel.ForeColor = Color.FromArgb(76, 175, 80);
+
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
     }
 }
