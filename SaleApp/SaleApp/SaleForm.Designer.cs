@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace SalesApp
 {
-    partial class SaleForm
+    partial class SaleForm : Form
     {
         private System.ComponentModel.IContainer components = null;
         private TextBox productNameTextBox;
