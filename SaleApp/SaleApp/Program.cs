@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SaleApp;
+using System;
 using System.Windows.Forms;
 
 namespace SalesApp
