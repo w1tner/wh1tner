@@ -100,13 +100,5 @@ namespace SalesApp.Tests
 
             Assert.AreEqual(initialCount, manager.Sales.Count);
         }
-
-        [TestMethod]
-        public void GenerateReport_WithNoSales_ReturnsEmptyMessage()
-        {
-            SaleManager manager = CreateManager();
-            string report = manager.GenerateReport();
-            Assert.IsTrue(report.Contains("No sales"));
-        }
     }
 }

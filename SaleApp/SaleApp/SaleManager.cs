@@ -87,23 +87,24 @@ namespace SalesApp
             if (Sales.Count == 0)
                 return "No sales to generate report.";
 
-            string report = "SALES REPORT\n";
+            string report = "ОТЧЁТ ПО ПРОДАЖАМ\n";
             report += "==================\n\n";
 
             foreach (var sale in Sales)
             {
-                report += $"Product: {sale.ProductName}\n";
-                report += $"Price: {sale.Price:C}\n";
-                report += $"Quantity: {sale.Quantity}\n";
-                report += $"Date: {sale.Date:dd.MM.yyyy}\n";
-                report += $"Revenue: {sale.TotalRevenue:C}\n";
+                report += $"Продукт: {sale.ProductName}\n";
+                report += $"Цена: {sale.Price:C}\n";
+                report += $"Количество: {sale.Quantity}\n";
+                report += $"Дата: {sale.Date:dd.MM.yyyy}\n";
+                report += $"Доход: {sale.TotalRevenue:C}\n";
                 report += "------------------\n";
             }
 
-            report += $"\nTOTAL REVENUE: {TotalRevenue:C}";
+            report += $"\nИТОГОВЫЙ ДОХОД: {TotalRevenue:C}";
 
             File.WriteAllText("sales_report.txt", report);
             return report;
         }
+
     }
 }
