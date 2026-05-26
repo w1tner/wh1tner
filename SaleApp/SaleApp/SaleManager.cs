@@ -8,11 +8,27 @@ namespace SalesApp
     public class SaleManager
     {
         public List<Sale> Sales { get; private set; }
+        private bool useFileStorage = true; // флаг для тестов
 
+        // Основной конструктор (использует файл)
         public SaleManager()
         {
             Sales = new List<Sale>();
-            LoadSales();
+            if (File.Exists("sales.txt"))
+            {
+                LoadSales();
+            }
+        }
+
+        // Новый конструктор для тестов (не использует файл)
+        public SaleManager(bool useFile)
+        {
+            Sales = new List<Sale>();
+            this.useFileStorage = useFile;
+            if (useFile && File.Exists("sales.txt"))
+            {
+                LoadSales();
+            }
         }
 
         public void AddSale(Sale sale)
@@ -21,7 +37,7 @@ namespace SalesApp
                 throw new ArgumentNullException(nameof(sale));
 
             Sales.Add(sale);
-            SaveSales();
+            if (useFileStorage) SaveSales();
         }
 
         public void RemoveSale(Sale sale)
@@ -30,8 +46,9 @@ namespace SalesApp
                 throw new ArgumentNullException(nameof(sale));
 
             Sales.Remove(sale);
-            SaveSales();
+            if (useFileStorage) SaveSales();
         }
+
 
         public decimal TotalRevenue
         {
@@ -68,22 +85,22 @@ namespace SalesApp
         public string GenerateReport()
         {
             if (Sales.Count == 0)
-                return "Нет продаж для генерации отчёта.";
+                return "No sales to generate report.";
 
-            string report = "ОТЧЁТ ПО ПРОДАЖАМ\n";
+            string report = "SALES REPORT\n";
             report += "==================\n\n";
 
             foreach (var sale in Sales)
             {
-                report += $"Продукт: {sale.ProductName}\n";
-                report += $"Цена: {sale.Price:C}\n";
-                report += $"Количество: {sale.Quantity}\n";
-                report += $"Дата: {sale.Date:dd.MM.yyyy}\n";
-                report += $"Доход: {sale.TotalRevenue:C}\n";
+                report += $"Product: {sale.ProductName}\n";
+                report += $"Price: {sale.Price:C}\n";
+                report += $"Quantity: {sale.Quantity}\n";
+                report += $"Date: {sale.Date:dd.MM.yyyy}\n";
+                report += $"Revenue: {sale.TotalRevenue:C}\n";
                 report += "------------------\n";
             }
 
-            report += $"\nИТОГОВЫЙ ДОХОД: {TotalRevenue:C}";
+            report += $"\nTOTAL REVENUE: {TotalRevenue:C}";
 
             File.WriteAllText("sales_report.txt", report);
             return report;
